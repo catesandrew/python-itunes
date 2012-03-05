@@ -25,6 +25,7 @@ __status__ = 'Beta'
 API_VERSION = '2'        # iTunes API version
 COUNTRY = 'US'           # ISO Country Store
 HOST_NAME = 'http://itunes.apple.com/'
+#HOST_NAME = 'http://ax.phobos.apple.com.edgesuite.net/'
 
 __cache_enabled = False  # Enable cache? if set to True, make sure that __cache_dir exists! (e.g. $ mkdir ./cache)
 __cache_dir = './cache'  # Set cache directory
@@ -435,6 +436,7 @@ class Track(Item):
         super(Track, self)._set(json)
         # Track information
         self.name = json['trackName']
+        self.kind = json['kind']
         self.url = json.get('trackViewUrl', None)
         self.preview_url = json.get('previewUrl', None)
         self.price = None
@@ -596,6 +598,10 @@ def get_md5(text):
     return hash.hexdigest()
 
 #SEARCHES
+def search_movie(query, limit=100, offset=0, order=None, store=COUNTRY):
+    return Search(query=query, media='muovie', entity='movie',
+                  offset=offset, limit=limit, order=order, country=store).get()
+
 def search_track(query, limit=100, offset=0, order=None, store=COUNTRY):
     return Search(query=query, media='music', entity='song',
                   offset=offset, limit=limit, order=order, country=store).get()
